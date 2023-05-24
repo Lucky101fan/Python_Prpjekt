@@ -1,31 +1,31 @@
-def spielzug_valide(spalte: int, zeile: int) -> bool:
+import tkinter.messagebox
+
+root = tkinter.Tk()
+root.geometry('500x300')
+
+def spielzug_valide(spielbrett,spalte: int, zeile: int) -> bool:
     breite = 7
     hoehe = 6
-    spielbrett = [
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", "x", " ", " ", " "],
-    [" ", " ", " ", " ", "o", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "]
-]
+    
 
     # Überprüfung, ob die Spalte im erlaubten Bereich liegt
     if spalte < 0 or spalte >= hoehe:
+        tkinter.messagebox.showinfo("Fehler.",  "Feld existiert nicht")
         return False
 
     # Überprüfung, ob die Zeile im erlaubten Bereich liegt
     if zeile < 0 or zeile >= breite:
+        tkinter.messagebox.showinfo("Fehler.",  "Feld existiert nicht")
         return False
 
     # Überprüfung, ob das Feld noch nicht besetzt ist
-    if spielbrett[spalte][zeile] != " ":
-        return False
-
-    if spielbrett[zeile][spalte] == "x" or spielbrett[zeile][spalte] == "o":
+    if spielbrett[spalte][zeile] != "":
         return True
-    else:
+
+    if spielbrett[zeile][spalte] == "blau" or spielbrett[zeile][spalte] == "lila":
         return False
+    else:
+        return True
 
 
     
@@ -36,11 +36,18 @@ def spielzug_valide(spalte: int, zeile: int) -> bool:
 
 
 
-
-spalte = 4
-zeile = 3
+spielbrett = [
+    [" ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", "blau", " ", " ", " "],
+    [" ", " ", " ", " ", "lila", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " "]
+    ]
+spalte = 9
+zeile = 1
 print("Zug Valide:")
-print(spielzug_valide(spalte, zeile))
+print(spielzug_valide(spielbrett,spalte, zeile))
 
 
 
