@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import random
 
 class SpielbrettGUI:
@@ -40,8 +41,8 @@ class SpielbrettGUI:
             self.farbe = 'purple'
        
         if winner:
-         self.neues_spiel()
-         print(f"Spieler {winner} hat gewonnen!")
+            self.neues_spiel()
+            self.endstand_anzeigen(winner)
          
 
     def überpruefe_gewinner(self, symbol):
@@ -62,6 +63,15 @@ class SpielbrettGUI:
 
         return None  
     
+    def endstand_anzeigen(self, winner):
+        """
+        Diese Methode zeigt eine Nachricht an, wenn das Spiel vorbei ist.
+        """
+        if winner == 'lila':
+            messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler Lila hat gewonnen!")
+        elif winner == 'blau':
+             messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler Blau hat gewonnen!")
+
     def start(self):
         self.fenster.mainloop()
 
