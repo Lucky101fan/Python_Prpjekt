@@ -1,4 +1,4 @@
-
+import gui
 
 def spielzug_Spieler():
     return
