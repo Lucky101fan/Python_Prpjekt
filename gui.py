@@ -32,17 +32,17 @@ class SpielbrettGUI:
                 break
 
         winner = self.überpruefe_gewinner(self.spieler)
-
+       
+        if winner:
+         self.endstand_anzeigen(self.spieler)
+         self.neues_spiel()
+         
         if self.spieler == 'lila':
             self.spieler = 'blau'
             self.farbe = 'blue'
         else:
             self.spieler = 'lila'
             self.farbe = 'purple'
-       
-        if winner:
-         self.endstand_anzeigen(self.spieler)
-         self.neues_spiel()
 
     def endstand_anzeigen(self, result):
      if result == 'lila':
@@ -64,6 +64,15 @@ class SpielbrettGUI:
             for spalte in range(spalten - 3):
                 if self.brett[zeile][spalte] != ' ' and \
                    self.brett[zeile][spalte] == self.brett[zeile][spalte + 1] == self.brett[zeile][spalte + 2] == self.brett[zeile][spalte + 3]:
+                    return symbol
+                
+        for zeile in range(zeilen-3):
+            for spalte in range(spalten-3):
+                if self.brett[zeile][spalte] != ' ' and \
+                self.brett[zeile][spalte] == self.brett[zeile + 1][spalte + 1] == self.brett[zeile + 2][spalte + 2] == self.brett[zeile + 3][spalte + 3]:
+                    return symbol
+                elif  self.brett[zeile + 3][spalte] != ' ' and \
+                self.brett[zeile + 3][spalte] == self.brett[zeile + 2][spalte + 1] == self.brett[zeile + 1][spalte + 2] == self.brett[zeile][spalte + 3]:
                     return symbol
 
         return None  
