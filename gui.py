@@ -73,5 +73,3 @@ class SpielbrettGUI:
         self.spieler = random.choice(['lila', 'blau'])
         self.farbe = 'purple' if self.spieler == 'lila' else 'blue'
 
-spielbrett_gui = SpielbrettGUI()
-spielbrett_gui.start()
