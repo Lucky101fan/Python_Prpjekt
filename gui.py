@@ -94,5 +94,4 @@ class SpielbrettGUI:
     def start(self):
         self.fenster.mainloop()
 
-spielbrett_gui = SpielbrettGUI()
-spielbrett_gui.start()
+
