@@ -1,0 +1,29 @@
+from enum import Enum
+
+class Spielfeld:
+    def __init__(self) -> None:
+        felder = [[], [], [], [], [], [], []]
+
+        for i in felder:
+            for _ in range(6):
+                i.append(Feld.Open)
+
+        self.felder = felder
+
+
+class Feld(Enum):
+    Open = 0
+    Red = 1
+    Blue = 2
+
+    def get_Feld(self):
+        return self.Open
+
+
+feld = Spielfeld()
+
+for i in feld.felder:
+    output = ""
+    for j in i:
+        output += j.get_Feld().__str__() + " "
+    print(output)

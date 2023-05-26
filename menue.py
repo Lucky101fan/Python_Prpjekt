@@ -1,7 +1,10 @@
 import tkinter as tk
 import sqlite3
+from gui import SpielbrettGUI
 
 class Menue:
+
+
     def __init__(self):
         self.db = sqlite3.connect('spielstand.db')
         self.db.execute('''CREATE TABLE IF NOT EXISTS spieler (name TEXT, gewinne INT)''')
@@ -34,18 +37,18 @@ class Menue:
         self.db.commit()
 
     def starte_gegen_computer(self):
-        self.spieler_eintragen()
         self.db.close()  # Schließen der Datenbankverbindung
         self.root.destroy()
-        spiel = Spielbrett(gegen_computer=True)
-        spiel.spiel_starten()
+
 
     def starte_gegen_spieler(self):
         self.spieler_eintragen()
         self.db.close()  # Schließen der Datenbankverbindung
         self.root.destroy()
-        spiel = Spielbrett(gegen_computer=False)
-        spiel.spiel_starten()
+        spielbrett_gui = SpielbrettGUI()
+        spielbrett_gui.start()
+    
+
 
 
 start = Menue()

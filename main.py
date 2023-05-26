@@ -12,9 +12,9 @@ class VierGewinnt:
             spalte = random.randint(0, self.spalten - 1)
 
         for zeile in range(self.zeilen - 1, -1, -1):
-            if self.brett[zeile][spalte] == ' ':
-                self.brett[zeile][spalte] = 'O'
-                self.felder[zeile][spalte].config(text='O', bg='yellow')
+            if self.board[zeile][spalte] == ' ':
+                self.board[zeile][spalte] = 'O'
+                self.buttons[zeile][spalte].config(text='O', bg='yellow')
                 if self.ueberpruefe_gewinner('O'):
                     self.game_over = True
                     self.endstand_anzeigen('O')
@@ -25,8 +25,8 @@ class VierGewinnt:
                     # Buttons werden reaktiviert, nachdem Computer Zug gemacht hat
                     for zeile in range(self.zeilen):
                         for spalte in range(self.spalten):
-                            if self.brett[zeile][spalte] == ' ':
-                                self.felder[zeile][spalte].config(state='normal')
+                            if self.board[zeile][spalte] == ' ':
+                                self.buttons[zeile][spalte].config(state='normal')
                     self.spielzug_wechseln()
                 break
 
@@ -34,4 +34,4 @@ class VierGewinnt:
         """
         Diese Methode wechselt den Zug zum nächsten Spieler.
         """
-        self.turn = 'blau' if self.turn == 'lila' else 'lila'
+        self.turn = 'O' if self.turn == 'X' else 'X'
