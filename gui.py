@@ -1,8 +1,9 @@
 import tkinter as tk
-from tkinter import messagebox
 import random
+from tkinter import messagebox
 
 class SpielbrettGUI:
+    # Gui
     def __init__(self):
         self.fenster = tk.Tk()
         self.fenster.title("Vier gewinnt")
@@ -23,7 +24,7 @@ class SpielbrettGUI:
                 feld_spalte.append(button)
             self.felder.append(feld_spalte)
             
-
+    # Methode, womit man auf ein Feld klicken kann und ein Stein setzt
     def feldKlick(self, spalte):
         for r in range(self.hoehe-1, -1, -1):
             if self.brett[r][spalte] == ' ':
@@ -41,10 +42,17 @@ class SpielbrettGUI:
             self.farbe = 'purple'
        
         if winner:
-            self.neues_spiel()
-            self.endstand_anzeigen(winner)
-         
+         self.endstand_anzeigen(winner)
+         self.neues_spiel()
 
+    # PopUp-Fenster zeigt den Gewinner an
+    def endstand_anzeigen(self, result):
+     if result == 'lila':
+        messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler lila hat gewonnen!")
+     elif result == 'blau':
+        messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler blau hat gewonnen!")
+
+    # Überprüft Vertikal/Horizontal nach Gewinner
     def überpruefe_gewinner(self, symbol):
         zeilen = len(self.brett)
         spalten = len(self.brett[0])
@@ -60,21 +68,20 @@ class SpielbrettGUI:
                 if self.brett[zeile][spalte] != ' ' and \
                    self.brett[zeile][spalte] == self.brett[zeile][spalte + 1] == self.brett[zeile][spalte + 2] == self.brett[zeile][spalte + 3]:
                     return symbol
+        
+        for zeile in range(zeilen - 3):
+            for spalte in range(spalten - 3):
+                if self.brett[zeile][spalte] != ' ' and \
+                   self.brett[zeile][spalte] == self.brett[zeile + 1][spalte + 1] == self.brett[zeile + 2][spalte + 2] == self.brett[zeile + 3][spalte + 3]:
+                    return symbol
+                elif self.brett[zeile + 3][spalte] != ' ' and \
+                   self.brett[zeile + 3][spalte] == self.brett[zeile + 2][spalte + 1] == self.brett[zeile + 1][spalte + 2] == self.brett[zeile][spalte + 3]:
+                    return symbol
 
         return None  
-    
-    def endstand_anzeigen(self, winner):
-        """
-        Diese Methode zeigt eine Nachricht an, wenn das Spiel vorbei ist.
-        """
-        if winner == 'lila':
-            messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler Lila hat gewonnen!")
-        elif winner == 'blau':
-             messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler Blau hat gewonnen!")
+   
 
-    def start(self):
-        self.fenster.mainloop()
-
+    ## Gui wird aktuallisiert, Neues Spiel wird erzeugt
     def neues_spiel(self):
         for spalte in self.felder:
             for button in spalte:
@@ -83,5 +90,8 @@ class SpielbrettGUI:
         self.spieler = random.choice(['lila', 'blau'])
         self.farbe = 'purple' if self.spieler == 'lila' else 'blue'
 
-spielbrett_gui = SpielbrettGUI()
-spielbrett_gui.start()
+
+    def start(self):
+        self.fenster.mainloop()
+
+
