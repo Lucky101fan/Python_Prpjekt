@@ -93,5 +93,3 @@ class SpielbrettGUI:
 
     def start(self):
         self.fenster.mainloop()
-
-
