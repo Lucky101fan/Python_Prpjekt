@@ -47,10 +47,7 @@ class SpielbrettGUI:
 
     # PopUp-Fenster zeigt den Gewinner an
     def endstand_anzeigen(self, result):
-     if result == 'lila':
-        messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler lila hat gewonnen!")
-     elif result == 'blau':
-        messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler blau hat gewonnen!")
+        messagebox.showinfo("Spiel vorbei", "Herzlichen Glückwunsch! Spieler {result} hat gewonnen!")
 
     # Überprüft Vertikal/Horizontal nach Gewinner
     def überpruefe_gewinner(self, symbol):
