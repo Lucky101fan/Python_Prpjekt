@@ -63,10 +63,16 @@ def Spielstand_auslesen(id):
     return None
 
 
-def Spieler_ausgeben():
+def Spiele_ausgeben():
     conn = sqlite3.connect('datenbank/spielstand.db')
     cursor = conn.cursor()
-
+    
+    cursor.execute('''CREATE TABLE IF NOT EXISTS "spieler" (
+    "spieler_1_name"	TEXT,
+	"spieler_2_name"	TEXT,
+	"gewinner"	INT,
+	"spielstand"	TEXT,
+	"id"	INTEGER PRIMARY KEY AUTOINCREMENT''')
     cursor.execute("SELECT spieler_1_name, spieler_2_name, gewinner FROM spieler")
     ergebnis = cursor.fetchall()
 
@@ -80,10 +86,29 @@ def Spieler_ausgeben():
     conn.close()
     return spieler_historie
 
+def Spieler_ausgabe():
+    conn = sqlite3.connect('datenbank/spielstand.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS"spieler_liste" (
+	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"name"	TEXT,
+	"gewinne"	INTEGER,
+	"verloren"	INTEGER
+    cursor.execute("SELECT * FROM spieler_liste")''')
+    
+    ergebnis = cursor.fetchall()
+
+    for row in ergebnis:
+        
+
+    conn.close()
+    return 
+
 
 Spielstand_speichern(spieler_1_name, spieler_2_name, gewinner, spielbrett)
 arr = Spielstand_auslesen(2)
-historie = Spieler_ausgeben()
+historie = Spiele_ausgeben()
 
 print(arr[5][1])
 # print(historie)
