@@ -115,6 +115,30 @@ def Spieler_ausgabe():
         print(row)
 
     conn.close()
+
+
+def neuer_Spieler(name):
+    conn = sqlite3.connect('datenbank/spielstand.db')  # Datenbankverbindung herstellen
+    cursor = conn.cursor()
+
+    cursor.execute("Select name from spieler_liste")
+    ergebnis = cursor.fetchall()
+
+    for row in ergebnis:
+        if(row == name):
+            cursor.execute('''CREATE TABLE IF NOT EXISTS spieler_liste (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+        	name TEXT,
+            gewinne INTEGER,
+            verloren INTEGER
+            )''')  # Tabelle erstellen, falls sie nicht existiert
+
+            cursor.execute("INSERT INTO spieler (name, gewinne, verloren) VALUES (?, ?, ?)",
+                (name, 0, 0))  # Spielstand in die Datenbank einfügen
+            break
+
+
+    conn.close()
     
 
 # Spielstand speichern
