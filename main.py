@@ -1,7 +1,10 @@
 import tkinter as tk
 import random
+import sqlite3
+import pytest
 from tkinter import messagebox
 from tkinter import filedialog
+from tkinter import ttk
 
 class VierGewinnt:
     def __init__(self, zeile=6, spalte=7):
@@ -9,25 +12,41 @@ class VierGewinnt:
         self.spalte = spalte
         self.spielfeld = [[' ' for _ in range(spalte)] for _ in range(zeile)]
 
+        self.conn = sqlite3.connect('Spieler.db')
+        self.db_cursour = self.conn.cursor()
+
+        self.spieler_name = ""
+
         self.root = tk.Tk()
         self.root.title("Vier Gewinnt")
 
         self.mode = tk.StringVar()
 
+        self.db_cursour.execute("SELECT name FROM Player")
+        rows = self.db_cursour.fetchall()
+        options = [row[0] for row in rows]
+
+        spieler_label = tk.Label(self.root, text="Spieler: ")
+        spieler_label.grid(row=0, column=0, pady=10, padx=5)
+
+        ausgewhaehlter_spieler = tk.StringVar()
+        dropdown = tk.OptionMenu(self.root, ausgewhaehlter_spieler, *options)
+        dropdown.grid(row=0, column=1, pady=10)
+
         mode_label = tk.Label(self.root, text="Spielmodus:")
-        mode_label.grid(row=0, column=0, pady=10, padx=100)
+        mode_label.grid(row=1, column=1, pady=5, padx=100)
 
         pvp_button = tk.Button(self.root, text="Spieler vs. Spieler", command=lambda: self.spiel_starten('P'))
-        pvp_button.grid(row=1, column=0, pady=5, padx=20)
+        pvp_button.grid(row=2, column=1, pady=5, padx=20)
 
         pvc_button = tk.Button(self.root, text="Spieler vs. Computer", command=lambda: self.spiel_starten('C'))
-        pvc_button.grid(row=2, column=0, pady=5, padx=20)
+        pvc_button.grid(row=3, column=1, pady=5, padx=20)
 
         load_button = tk.Button(self.root, text="Spielstand laden", command=self.load_game)
-        load_button.grid(row=3, column=0, pady=5, padx=20)
+        load_button.grid(row=4, column=1, pady=5, padx=20)
 
         exit_button = tk.Button(self.root, text="Programm beenden", command=self.root.quit)
-        exit_button.grid(row=4, column=0, pady=5, padx=20)
+        exit_button.grid(row=5, column=1, pady=5, padx=20)
 
     def spiel_starten(self, modus):
         self.mode.set(modus)
@@ -223,3 +242,50 @@ class VierGewinnt:
 # Spiel starten
 game = VierGewinnt()
 game.run()
+game.conn.close()
+
+
+def test_check_gewinner():
+    spiel = VierGewinnt(7, 6)
+
+    # Horizontale Gewinnbedingung
+    spiel.spielfeld[3][1] = 'X'
+    spiel.spielfeld[3][2] = 'X'
+    spiel.spielfeld[3][3] = 'X'
+    spiel.spielfeld[3][4] = 'X'
+    assert spiel.check_gewinner('X') == True
+
+    # Vertikale Gewinnbedingung
+    spiel.spielfeld[2][4] = 'O'
+    spiel.spielfeld[3][4] = 'O'
+    spiel.spielfeld[4][4] = 'O'
+    spiel.spielfeld[5][4] = 'O'
+    assert spiel.check_gewinner('O') == True
+
+    # Diagonale (/) Gewinnbedingung
+    spiel.spielfeld[2][2] = 'X'
+    spiel.spielfeld[3][3] = 'X'
+    spiel.spielfeld[4][4] = 'X'
+    spiel.spielfeld[5][5] = 'X'
+    assert spiel.check_gewinner('X') == True
+
+    # Diagonale (\) Gewinnbedingung
+    spiel.spielfeld[1][4] = 'O'
+    spiel.spielfeld[2][3] = 'O'
+    spiel.spielfeld[3][2] = 'O'
+    spiel.spielfeld[4][1] = 'O'
+    assert spiel.check_gewinner('O') == True
+
+    # Kein Gewinner
+    assert spiel.check_gewinner('X') == False
+    assert spiel.check_gewinner('O') == False
+
+
+def test_spielzug_valide():
+    spiel = VierGewinnt(7, 6)
+    spiel.spielfeld[0][5] = 'X'  # Beispiel für bereits belegte Spalte
+
+    assert spiel.spielzug_valide(2) == False  # Erwartet: False (Spalte bereits belegt)
+    assert spiel.spielzug_valide(4) == True  # Erwartet: True (Spalte frei)
+    assert spiel.spielzug_valide(7) == False  # Erwartet: False (Spalte außerhalb des Spielfelds)
+    assert spiel.spielzug_valide(-1) == False  # Erwartet: False (Spalte außerhalb des Spielfelds)
